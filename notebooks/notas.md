@@ -1,5 +1,5 @@
 # Notas del proyecto 
-El siguiente proyecto tiene como objetivo prácticar los conocimientos adquiridos en el curso de deep learning disponible en: _url_
+El siguiente proyecto tiene como objetivo prácticar los conocimientos adquiridos en el [video del curso de deep learning del Qubit de Newton](https://youtu.be/EZJOxvMOZas?si=IO8x9ebSbQo0gpE2)
 
 Estas notas son apuntes personales del proyecto 
 
