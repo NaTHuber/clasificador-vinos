@@ -9,27 +9,31 @@ Estas notas son apuntes personales del proyecto
 
 ###  Librerias  
 
-- torch → Librería principal de PyTorch.
+- `torch`: Librería principal de PyTorch.
 
-- torch.nn → Módulo que contiene clases para construir redes neuronales (capas, funciones de activación, etc.).
+- `torch.nn`: Módulo que contiene clases para construir redes neuronales (capas, funciones de activación, etc.).
 
-- torch.optim → Algoritmos de optimización (SGD, Adam, etc.).
+- `torch.optim`: Algoritmos de optimización (SGD, Adam, etc.).
 
-- load_wine → Dataset de vinos incluido en scikit-learn (atributos químicos de vinos y su clasificación en 3 tipos).
+- `load_wine`: Dataset de vinos incluido en scikit-learn (atributos químicos de vinos y su clasificación en 3 tipos).
 
-- train_test_split → Divide el dataset en entrenamiento y prueba.
+- `train_test_split`: Divide el dataset en entrenamiento y prueba.
 
-- StandardScaler → Escala los datos para que tengan media 0 y desviación estándar 1
+- `StandardScaler`: Escala los datos para que tengan media 0 y desviación estándar 1
 
-- matplotlib.pyplot → Para graficar.
+- `matplotlib.pyplot`: Para graficar.
 
-- numpy → Para operaciones numéricas.
+- `numpy`: Para operaciones numéricas.
+
+- `pandas`: Manejar datos tabulares o de series de tiempo de manera eficiente
+
+- `seaborn`: Visualización de datos 
 
 ### Carga del dataset 
 
-- data.data (X) → Matriz de características (atributos de cada vino).
+- `data.data (X)`: Matriz de características (atributos de cada vino).
 
-- data.target (y) → Vector con la clase de cada vino (0, 1 o 2).
+- `data.target (y)`: Vector con la clase de cada vino (0, 1 o 2).
 
 
 ---
@@ -37,11 +41,11 @@ Estas notas son apuntes personales del proyecto
 
 ## Exploración, limpieza, preprocesamiento y estructuración del dataset
 
-- Número de muestras: 178
+- **Número de muestras:** 178
 
-- Número de características: 13
+- **Número de características:** 13
 
-**Características del dataset**
+**Características del dataset y una pequeña descripción**
 | Campo                             | Descripción                                                                 |
 |-----------------------------------|-----------------------------------------------------------------------------|
 | **alcohol**                       | Contenido de alcohol en el vino (% vol.)                                   |
@@ -63,29 +67,29 @@ Estas notas son apuntes personales del proyecto
 ![alt text](img/histograma.png)
 
 
-- Hay características con escalas muy diferentes (proline llega a 1600, mientras nonflavanoid_phenols < 1) → necesitaremos escalado.
+- Hay características con escalas muy diferentes (`proline` llega a 1600, mientras `nonflavanoid_phenols` < 1) por lo que se necesita escalado.
 
-- Algunas variables como color_intensity o malic_acid son muy asimétricas, lo que podría afectar modelos que asumen normalidad.
+- Algunas variables como `color_intensity` o `malic_acid` son muy asimétricas, lo que podría afectar modelos que asumen normalidad.
 
-- Algunas distribuciones parecen bimodales (flavanoids), lo que podría indicar que ayudan a diferenciar clases.
+- Algunas distribuciones parecen bimodales (`flavanoids`), lo que podría indicar que ayudan a diferenciar clases.
 
 
 ### Matriz de correlación
 
 ![alt text](img/matriz_correlaciones.png)
 
-- Las variables como flavanoids, color_intensity y proline parecen muy relevantes para diferenciar clases.
+- Las variables como `flavanoids`, `total_phenols`, `od280/od315` y  `proline` parecen muy relevantes para diferenciar clases.
 
 - Algunas variables están muy correlacionadas, lo que podría implicar redundancia, pero en redes neuronales eso no es un problema grave porque el modelo aprende ponderaciones.
 
-- Esta matriz nos da pistas de qué variables podrían ser más “predictoras” y cuáles son casi ruido.
+- Esta matriz nos da pistas de qué variables podrían ser más _predictoras_ y cuáles son casi ruido.
 
 ### Gráfico de pares
 ![alt text](img/grafico_pares.png)
 
-Esto nos da una intuición visual: hay variables muy buenas para separar clases (flavanoids, proline, od280/od315) y otras menos útiles.
+Esto nos da una intuición visual: hay variables muy buenas para separar clases (`flavanoids`, `proline`, `od280/od315`) y otras menos útiles.
 
-Aunque se entrenará con todas, este análisis podría inspirar una versión reducida del modelo usando solo las más relevantes y comparar el rendimiento.
+> **Nota:** _Aunque se entrenará con todas, este análisis podría inspirar una versión reducida del modelo usando solo las más relevantes y comparar el rendimiento._
 
 ### División de dataset en entrenamiento y prueba y escalamiento de datos 
 
@@ -97,17 +101,17 @@ X_train, X_test, y_train, y_test = train_test_split(
     stratify=y        
 )
 ```
-- `stratify=y` → asegura que en train y test haya la misma proporción de cada clase, bastante importante en datasets pequeños.
+- `stratify=y`: Asegura que en train y test haya la misma proporción de cada clase, bastante importante en datasets pequeños.
 ```python
 X_train_scaled = scaler.fit_transform(X_train) 
 X_test_scaled = scaler.transform(X_test) 
 ```
-- `fit_transform` vs `transform` → primero se ajusta el escalador con train y después se aplica tanto a train como a test, así evitamos fuga de datos.
+- `fit_transform` vs `transform`: Primero se ajusta el escalador con train y después se aplica tanto a train como a test, así evitamos fuga de datos.
 
 --- 
 
 ## Crear la clase de la red neuronal 
-MLP (Multilayer Perceptron) clásico de 3 capas, dos ocultas con ReLU y una de salida.
+MLP (_Multilayer Perceptron_) clásico de 3 capas, dos ocultas con ReLU y una de salida.
 ```python
 class MLP(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
@@ -123,13 +127,13 @@ class MLP(nn.Module):
     def forward(self, x):
         return self.model(x) 
 ```
-- `nn.Linear(input_size, hidden_size)` → capa densa.
+- `nn.Linear(input_size, hidden_size)` ⤑  capa densa.
 
-- `nn.ReLU()` → no linealidad que permite aprender funciones complejas.
+- `nn.ReLU()` ⇢ no linealidad que permite aprender funciones complejas.
 
 - Se repite capa oculta del mismo tamaño.
 
-- `nn.Linear(hidden_size, output_size)` → capa de salida con 3 neuronas (una por clase).
+- `nn.Linear(hidden_size, output_size)` ⇢ capa de salida con 3 neuronas (una por clase).
 
 <!-- - Sin softmax explícito: en clasificación multi-clase con CrossEntropyLoss, PyTorch espera logits y aplica log_softmax internamente. -->
 
