@@ -28,7 +28,7 @@ Se utiliza el dataset `load_wine` de `scikit-learn`, que contiene atributos quí
 ## Flujo de trabajo
 
 ```mermaid
-graph LR 
+flowchart TD 
     A[Importaciones y carga de datos] --> B[Exploración, limpieza, preprocesamiento] 
     B --> C[Definición de la red neuronal MLP] 
     C --> D[Selección de hiperparámetros e instanciación] 
