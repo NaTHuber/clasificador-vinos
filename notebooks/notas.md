@@ -1,9 +1,20 @@
 # Notas del proyecto 
-El siguiente proyecto tiene como objetivo prácticar los conocimientos adquiridos en el [video del curso de deep learning del Qubit de Newton](https://youtu.be/EZJOxvMOZas?si=IO8x9ebSbQo0gpE2)
+El siguiente proyecto tiene como objetivo prácticar los conocimientos adquiridos en [una de las clases del curso de deep learning del Qubit de Newton](https://youtu.be/EZJOxvMOZas?si=IO8x9ebSbQo0gpE2)
 
-Estas notas son apuntes personales del proyecto 
+Estas notas son apuntes personales del proyecto.
 
 # Flujo de trabajo 
+En este proyectos se siguió el siguiente flujo de trabajo:
+
+```mermaid 
+graph LR
+    A[Importaciones y carga de datos] --> B[Exploración, limpieza, preprocesamiento y estructuración del dataset]
+    B --> C[Crear la clase de la red neuronal]
+    C --> D[Seleccionar hiperparámetros e instanciar la red/modelo]
+    D --> E[Definir la función de pérdida y el optimizador]
+    E --> F[Entrenamiento de la red]
+    F --> G[Evaluación con datos de prueba y guardado del modelo]
+```
 
 ## Importaciones y carga de datos
 
