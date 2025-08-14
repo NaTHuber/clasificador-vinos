@@ -154,26 +154,27 @@ class MLP(nn.Module):
 
 - `input_size = 13`: Lo ponemos igual al número de características del dataset para que la capa de entrada encaje perfectamente.
 
-- `hidden_size = 64`: Indica cuántas neuronas tendrá cada capa oculta. Más neuronas → más capacidad de aprender patrones complejos, pero también más riesgo de sobreajuste.
+- `hidden_size = 64`: Indica cuántas neuronas tendrá cada capa oculta. Más neuronas ⤑ más capacidad de aprender patrones complejos, pero también más riesgo de sobreajuste.
 
 - `output_size = 3`: Una neurona por cada clase.
 
-- `learning_rate = 0.01`: Qué tan rápido se ajustan los pesos en cada paso.
+- `learning_rate = 0.001`: Qué tan rápido se ajustan los pesos en cada paso.
 
 - `num_epochs = 100`: Cuántas veces pasa el modelo por todos los datos de entrenamiento.
 
 ```python
 model = MLP(input_size, hidden_size, output_size)
 ```
-Crea la red con 13 entradas, 64 neuronas por capa oculta, y 3 neuronas de salida.
+**Crea la red con 13 entradas, 64 neuronas por capa oculta, y 3 neuronas de salida.** 
 
 ## Definir la función de pérdida y el optimizador
 
-- `nn.CrossEntropyLoss()`: CrossEntropyLoss es la más común para clasificación multiclase
+- `nn.CrossEntropyLoss()`: CrossEntropyLoss es la más común para clasificación multiclase.
 
 - `optim.Adam(model.parameters(), lr=learning_rate)`: optimizador adaptativo, ajusta la tasa de aprendizaje por parámetro. 
 
 ## Entrenar a la red 
+
 ```mermaid
 flowchart TD
     A[Inicio] --> B[Inicializar listas de pérdidas]
@@ -186,28 +187,33 @@ flowchart TD
     G -->|No| C
     C -->|No| I[Fin]
 ```
-Inicialización:
+1. Inicio:
+    - Listas para trackear el historial de pérdidas.
 
-- Listas para trackear el historial de pérdidas.
+2. Bucle de Épocas:
+    - Entrenamiento:
+        - `model.train()`: Habilita dropout/batch norm.
+        - `zero_grad()`: Evita acumulación de gradientes.
+        - `loss.backward()`: Retropropagación automática.
 
-Bucle de Épocas:
+    - Validación:
+        - `model.eval()`: Desactiva dropout/batch norm.
+        - `no_grad()`: Optimiza memoria y velocidad.
 
-- Entrenamiento:
-
-    - model.train(): Habilita dropout/batch norm.
-
-    - zero_grad(): Evita acumulación de gradientes.
-
-    - loss.backward(): Retropropagación automática.
-
-Validación:
-
-- model.eval(): Desactiva dropout/batch norm.
-
-- no_grad(): Optimiza memoria y velocidad.
-
-Logging:
-
-- Muestra progreso cada 10 épocas.
+3. Logging:
+    - Muestra progreso cada 10 épocas.
 
 ## Evaluar con set de test y guardar el modelo
+
+Precisión del modelo en el conjunto de prueba: **97.22%**
+
+![alt text](img/grafica_perdida.png)
+
+Ambas pérdidas bajan suave y juntas por lo que el  entrenamiento es más estable, casi sin sobreajuste.
+
+![alt text](img/RealesvsPredicciones.png)
+
+Hay muy pocos puntos azules sin rojo encima, lo que indica las pocas predicciones erróneas. El modelo clasifica correctamente casi todas las muestras.
+
+## Notas para mejoras 
+Revisar esas muestras erróneas en las gráficas del pairplot o con una matriz de confusión para ver si siempre fallan en la misma clase.
