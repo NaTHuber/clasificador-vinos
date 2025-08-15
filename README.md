@@ -102,3 +102,4 @@ El entrenamiento fue estable y las pérdidas bajaron suavemente minimizando el s
 Puedes escribirme al email: [nbaezhuber@gmail.com](mailto:nbaezhuber@gmail.com)
 
 
+
