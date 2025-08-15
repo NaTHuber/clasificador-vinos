@@ -1,4 +1,4 @@
-# Clasificador de Vinos con PyTorch
+# Clasificador de Vinos 
 
 Este proyecto tiene como objetivo poner en práctica los conocimientos adquiridos en una de las [clases del curso de deep learning del Qubit de Newton](https://youtu.be/EZJOxvMOZas?si=IO8x9ebSbQo0gpE2). Se trabaja con el dataset de vinos incluido en `scikit-learn`, utilizando una red neuronal para clasificar los vinos en tres clases distintas.
 
